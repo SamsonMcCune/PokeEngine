@@ -23,12 +23,8 @@ class Pokemon:
     
 
     def stat_calc(self):
-        
-        # Define increase/decrease multipliers
         increase = 1.1
         decrease = 0.9
-
-        # Nature modifiers stored in dict form
         nature_modifiers = {
             "adamant": {"attack": increase, "special-attack": decrease},
             "modest": {"special-attack": increase, "attack": decrease},
@@ -51,14 +47,9 @@ class Pokemon:
             "sassy": {"special-defense": increase, "speed": decrease},
             "careful": {"special-defense": increase, "special-attack": decrease}
         }
-        # Create an arbitrary list of 1s
         self.nature_mod = {col: 1.0 for col in self.stats_df.columns}
-
-        # Replace the 1s with the increase or decrease as listed above
         if self.nature in nature_modifiers:
             self.nature_mod.update(nature_modifiers[self.nature])
-
-        #Set placeholder values for level, EVs, IVs. Can be easily changed later.
         placeholder_level = 50
         level = placeholder_level
         IVs = {
@@ -83,10 +74,7 @@ class Pokemon:
                 value = math.floor(.01*(2*self.base + IVs["hp"] + math.floor(.25*EVs["hp"]))*level) + level + 10 
             else:
                 value = math.floor((math.floor(.01*(2*self.base + IVs[stat] + math.floor(.25*EVs[stat]))*level + 5))*self.nature_mod[stat])
-                # Apply the nature multiplier
             calced_stats[stat] = value
-
-        #Calculate the stats
         return calced_stats
 
     def show_mon(self):
@@ -98,7 +86,7 @@ class Pokemon:
         stats = self.stat_calc()
         return {
             "name": self.name,
-            "type": self.types,   # list of types
+            "type": self.types,   
             "hp": stats["hp"],
             "attack": stats["attack"],
             "defense": stats["defense"],

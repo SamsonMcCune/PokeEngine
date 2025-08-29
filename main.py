@@ -91,20 +91,16 @@ def damage_calc(move, user, target, level, accuracy):
                 multiplier *= type_chart.get(move_type, {}).get(target_type, 1)
             return multiplier
 
-        # === Critical hit check ===
         crit_rate = 1/16
         result = np.random.binomial(1, crit_rate)
         critical_hit = 1.5 if result == 1 else 1
         if critical_hit > 1:
             print("A critical hit!")
 
-        # === Random damage variation ===
         damage_range = np.random.randint(85, 101) / 100
 
-        # === STAB ===
         STAB = 1.5 if move["type"] in user["type"] else 1
 
-        # === Type Effectiveness ===
         effectiveness = type_effectiveness(move["type"], target["type"])
         if effectiveness > 1:
             print("It's super effective!")
@@ -113,17 +109,13 @@ def damage_calc(move, user, target, level, accuracy):
         elif effectiveness < 1:
             print("It's not very effective...")
 
-        # === Damage Formula ===
         if move["stat"] == "attack":
             possible_damage = ((((2*level/5 + 2)*move["damage"]*user["attack"]/target["defense"])/50)+2)
         elif move["stat"] == "special-attack":
             possible_damage = ((((2*level/5 + 2)*move["damage"]*user["special-attack"]/target["special-defense"])/50)+2)
         else:
             possible_damage = 0
-
         damage = int(possible_damage * critical_hit * damage_range * STAB * effectiveness * (accuracy/100))
-
-        # === Apply damage ===
         max_hp = target["hp"]
         target["hp"] = max(0, target["hp"] - damage)
 
